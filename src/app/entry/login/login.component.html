@@ -44,7 +44,7 @@
                                           <div class="form-group row">
                                               <div class="col-md-6 col-12 text-center text-sm-left">
                                               </div>
-                                              <div class="col-md-6 col-12 float-sm-left text-center text-sm-right"><a routerLink="/recover-password" class="card-link">Forgot Password?</a></div>
+                                              <div class="col-md-6 col-12 float-sm-left text-center text-sm-right"><a (click)="forgotPass(forgot)" class="card-link">Forgot Password?</a></div>
                                           </div>
                                           <button type="submit" class="btn btn-outline-primary btn-block" (click)="onSubmit(email.value, password.value, content)" [disabled]="form.pristine || form.invalid"><i class="ft-unlock"></i> Login</button>
                                       </form>
@@ -63,7 +63,7 @@
 
   <ng-template #content let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Email Verified</h4>
+      <h4 class="modal-title" id="modal-basic-title">Email Verification</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -73,6 +73,27 @@
         <div class="card-body">
             <p>Didn't Recieved an Email?</p>
             <button class="btn btn-outline-danger btn-block" (click)="resend()">Resend Email</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+    </div>
+  </ng-template>
+
+
+  <ng-template #forgot let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Password Reset</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Enter your Email to Reset your password</span></p>
+        <div class="card-body">
+            <input type="email" class="form-control form-control-lg" [(ngModel)]="femail" id="email-forgot" placeholder="Enter Email" required>
+                <br>
+            <button class="btn btn-outline-danger btn-block" (click)="verify()">Send Email</button>
         </div>
     </div>
     <div class="modal-footer">

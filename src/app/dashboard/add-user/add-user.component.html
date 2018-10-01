@@ -1,0 +1,71 @@
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-1">
+        <h3 class="content-header-title">User Management</h3>
+    </div>
+    <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-10">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a>User Profile</a>
+                </li>
+                <li class="breadcrumb-item active">Add User
+                </li>
+            </ol>
+        </div>
+    </div>
+  </div>
+  
+  <div class="content-body">
+    <section class="basic-elements">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header">
+                      <h4 class="card-title">Update Information</h4>
+                  </div>
+                  <div class="card-content">
+                      <div class="card-body">
+                          <form [formGroup]="form" (ngSubmit)="submit(form)">
+                          <div class="row">
+                              <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                  <fieldset class="form-group">
+                                      <label for="fname">First Name</label>
+                                      <input type="text" formControlName="fname" #fname class="form-control" id="fname">
+                                  </fieldset>
+                              </div>
+                              <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                <fieldset class="form-group">
+                                  <label for="lname">Last Name</label>
+                                  <input type="text" formControlName="lname" #lname class="form-control" id="lname">
+                              </fieldset>
+                              </div>
+                              <div class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                                  <fieldset class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" formControlName="email" #email class="form-control" id="email">
+                                </fieldset>
+                                </div>
+                              </div>
+                            <div class="row">
+                              <div class="col-xl-8 col-lg-12 col-md-12 mb-1">
+                                  <fieldset class="form-group">
+                                      <label for="placeTextarea">User Details</label>
+                                      <textarea class="form-control" id="placeTextarea" formControlName="detail" #detail rows="3" placeholder="User Details (1-2 Lines)"></textarea>
+                                  </fieldset>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div id="save">
+                                <button type="submit" class="btn btn-primary btn-min-width mr-1 mb-1" [disabled]="form.pristine || form.invalid">Add</button>
+                              </div>
+                            </div>
+                          </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+    
+  </section>
+  </div>

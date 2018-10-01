@@ -1,0 +1,317 @@
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-1">
+        <h3 class="content-header-title">User Details</h3>
+    </div>
+    <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-12">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a>Users</a>
+                </li>
+                <li class="breadcrumb-item active">User Details
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="content-body">
+    <section id="configuration">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Users Data</h4>
+            </div>
+            <div class="card-content collapse show">
+              <div class="card-body card-dashboard">
+                <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-12 mb-1">
+                      <fieldset>
+                          <label for="userType">Selected Users:</label>
+                          <select class="form-control" id="userType" [(ngModel)]="selected" >
+                              <option value="Admins" selected>Admins</option>
+                              <option value="Customers">Customers</option>
+                              <option value="Workers">Workers</option>
+                            </select>
+                      </fieldset>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-4 mb-1">
+                      <br>
+                        <fieldset>
+                            <button class="btn btn-primary btn-block" style="position: relative; top: 6px;" (click)="viewChange()" >View</button>
+                        </fieldset>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<!-- Admins -->
+  <div class="content-body" *ngIf="showAdmin">
+      <section id="configuration">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Users Data</h4>
+              </div>
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard">
+                    <app-spinner *ngIf="showSpinner"></app-spinner>
+                    <br>
+                    <input type="email"
+                    class="form-control" [(ngModel)]="userFilter.email" placeholder="Search User by Email"  *ngIf="!showSpinner" style="max-width: 300px">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="!showSpinner">
+                          <thead>
+                            <tr >
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Details</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of admins | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: pAdmin }">
+                              <th scope="row">{{item.firstName}}</th>
+                              <td class="small">{{item.email}}</td>
+                              <td class="small"><p>{{item.detail}}</p></td>
+                              <td class="small">
+                                  <span style="margin-left: 6px;"></span>
+                                <a style="color: green;" (click)="edit(Edit, item)"><i class="ft-edit"></i></a>
+                                <span style="margin-left: 6px;"></span>
+                                <a style="color: red" (click)="delete(item)"><i class="ft-trash-2"></i></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <pagination-controls (pageChange)="pAdmin = $event" previousLabel="Previous"
+                        nextLabel="Next"
+                        responsive="true"
+                        autoHide="true"
+                        directionLinks="false"
+                        ></pagination-controls>
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<!-- Customer -->
+  <div class="content-body" *ngIf="showCustomers">
+      <section id="configuration">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Users Data</h4>
+              </div>
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard">
+                    <app-spinner *ngIf="showSpinner"></app-spinner>
+                    <br>
+                    <input type="email"
+                    class="form-control" [(ngModel)]="userFilter.email" placeholder="Search User by Email"  *ngIf="!showSpinner" style="max-width: 300px">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="!showSpinner">
+                          <thead>
+                            <tr >
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Age</th>
+                              <th>Gender</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of customers | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: p }">
+                              <th scope="row">{{item.firstName}}</th>
+                              <td class="small">{{item.email}}</td>
+                              <td class="small">{{item.age}}</td>
+                              <td class="small">{{item.gender}}</td>
+                              <td class="small">
+                                  <span style="margin-left: 6px;"></span>
+                                <a style="color: green;" (click)="editCustomer(EditCustomer, item)"><i class="ft-edit"></i></a>
+                                <span style="margin-left: 6px;"></span>
+                                <a style="color: red" (click)="deleteCustomer(item)"><i class="ft-trash-2"></i></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <pagination-controls (pageChange)="p = $event" previousLabel="Previous"
+                        nextLabel="Next"
+                        responsive="true"
+                        autoHide="true"
+                        directionLinks="false"
+                        ></pagination-controls>
+                        <!-- <ngb-pagination style="position: relative; float: right;" [collectionSize]="lengthCustomer" [(page)]="currentPage"  size="lg"></ngb-pagination> -->
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  </div>
+<!-- Worker -->
+  <div class="content-body" *ngIf="showWorker">
+      <section id="configuration">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Users Data</h4>
+              </div>
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard">
+                    <app-spinner *ngIf="showSpinner"></app-spinner>
+                    <br>
+                    <input type="email"
+                    class="form-control" [(ngModel)]="userFilter.email" placeholder="Search User by Email"  *ngIf="!showSpinner" style="max-width: 300px">
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="!showSpinner">
+                          <thead>
+                            <tr >
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Details</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of workers | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: pWorker }">
+                              <th scope="row">{{item.firstName}}</th>
+                              <td class="small">{{item.email}}</td>
+                              <td class="small"><p>{{item.detail}}</p></td>
+                              <td class="small">
+                                  <span style="margin-left: 6px;"></span>
+                                <a style="color: green;" (click)="editWorker(EditWorker, item)"><i class="ft-edit"></i></a>
+                                <span style="margin-left: 6px;"></span>
+                                <a style="color: red" (click)="delete(item)"><i class="ft-trash-2"></i></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <pagination-controls (pageChange)="pWorker = $event" previousLabel="Previous"
+                        nextLabel="Next"
+                        responsive="true"
+                        autoHide="true"
+                        directionLinks="false"
+                        ></pagination-controls>
+                      </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal for Edit Purpose -->
+  <ng-template #Edit let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Update User Information</span></p>
+          <div class="card-body" *ngIf="itemA">
+              <div class="row">
+                  <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                      <fieldset>
+                          <label >First Name</label>
+                          <input type="text" class="form-control" [(ngModel)]="itemA.firstName">
+                      </fieldset>
+                  </div>
+                  <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                      <fieldset>
+                          <label >Last Name</label>
+                          <input type="text" class="form-control" [(ngModel)]="itemA.lastName">
+                      </fieldset>
+                  </div>
+                  
+              </div>
+              <div class="row">
+                  <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                      <fieldset>
+                          <label >Email</label>
+                          <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemA.email">
+                      </fieldset>
+                  </div>
+                  <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                      <fieldset>
+                          <label>Details</label>
+                          <input type="text" class="form-control" readonly="readonly" [(ngModel)]="itemA.detail">
+                      </fieldset>
+                  </div>
+              </div>
+              <br>
+              <button class="btn btn-outline-danger btn-block" (click)="updateAdmin()">Save</button>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+      </div>
+    </ng-template>
+  
+
+      <!-- Modal for Edit Customer Purpose -->
+  <ng-template #EditCustomer let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Update User Information</span></p>
+        <div class="card-body" *ngIf="itemA">
+            <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                    <fieldset>
+                        <label >First Name</label>
+                        <input type="text" class="form-control" [(ngModel)]="itemC.firstName">
+                    </fieldset>
+                </div>
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                    <fieldset>
+                        <label >Last Name</label>
+                        <input type="text" class="form-control" [(ngModel)]="itemC.lastName">
+                    </fieldset>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                    <fieldset>
+                        <label >Email</label>
+                        <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemC.email">
+                    </fieldset>
+                </div>
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                    <fieldset>
+                        <label>Address</label>
+                        <input type="text" class="form-control" [(ngModel)]="itemC.address">
+                    </fieldset>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-outline-danger btn-block" (click)="updateAdmin()">Save</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+    </div>
+  </ng-template>

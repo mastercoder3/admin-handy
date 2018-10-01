@@ -15,7 +15,6 @@ export class AuthService {
 
   signup(email,password){
     return this.auth.auth.createUserWithEmailAndPassword(email,password);
-
   }
 
   sendVerificationEmail(){
@@ -28,5 +27,11 @@ export class AuthService {
 
   forgotPassword(email){
     return this.auth.auth.sendPasswordResetEmail(email);
+  }
+
+  resetPassword(password){
+    const user = firebase.auth().currentUser;
+    user.updatePassword(password);
+    return user;
   }
 }
