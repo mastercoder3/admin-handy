@@ -184,7 +184,7 @@
                             <tr >
                               <th>Name</th>
                               <th>Email</th>
-                              <th>Details</th>
+                              <th>Status</th>
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -192,7 +192,7 @@
                             <tr *ngFor="let item of workers | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: pWorker }">
                               <th scope="row">{{item.firstName}}</th>
                               <td class="small">{{item.email}}</td>
-                              <td class="small"><p>{{item.detail}}</p></td>
+                              <td class="small"><p>{{item.status}}</p></td>
                               <td class="small">
                                   <span style="margin-left: 6px;"></span>
                                 <a style="color: green;" (click)="editWorker(EditWorker, item)"><i class="ft-edit"></i></a>
@@ -218,7 +218,7 @@
   </div>
 
   <!-- Modal for Edit Purpose -->
-  <ng-template #Edit let-modal>
+  <ng-template #EditCustomer let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -227,18 +227,18 @@
       </div>
       <div class="modal-body">
           <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Update User Information</span></p>
-          <div class="card-body" *ngIf="itemA">
+          <div class="card-body" *ngIf="itemC">
               <div class="row">
                   <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                       <fieldset>
                           <label >First Name</label>
-                          <input type="text" class="form-control" [(ngModel)]="itemA.firstName">
+                          <input type="text" class="form-control" [(ngModel)]="itemC.firstName">
                       </fieldset>
                   </div>
                   <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                       <fieldset>
                           <label >Last Name</label>
-                          <input type="text" class="form-control" [(ngModel)]="itemA.lastName">
+                          <input type="text" class="form-control" [(ngModel)]="itemC.lastName">
                       </fieldset>
                   </div>
                   
@@ -247,18 +247,18 @@
                   <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                       <fieldset>
                           <label >Email</label>
-                          <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemA.email">
+                          <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemC.email">
                       </fieldset>
                   </div>
                   <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                       <fieldset>
-                          <label>Details</label>
-                          <input type="text" class="form-control" readonly="readonly" [(ngModel)]="itemA.detail">
+                          <label>Address</label>
+                          <input type="text" class="form-control" [(ngModel)]="itemC.address">
                       </fieldset>
                   </div>
               </div>
               <br>
-              <button class="btn btn-outline-danger btn-block" (click)="updateAdmin()">Save</button>
+              <button class="btn btn-outline-danger btn-block" (click)="updateCustomer()">Save</button>
           </div>
       </div>
       <div class="modal-footer">
@@ -268,7 +268,7 @@
   
 
       <!-- Modal for Edit Customer Purpose -->
-  <ng-template #EditCustomer let-modal>
+  <ng-template #EditWorker let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -277,18 +277,18 @@
     </div>
     <div class="modal-body">
         <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Update User Information</span></p>
-        <div class="card-body" *ngIf="itemA">
+        <div class="card-body" *ngIf="itemW">
             <div class="row">
                 <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                     <fieldset>
                         <label >First Name</label>
-                        <input type="text" class="form-control" [(ngModel)]="itemC.firstName">
+                        <input type="text" class="form-control" [(ngModel)]="itemW.firstName">
                     </fieldset>
                 </div>
                 <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                     <fieldset>
                         <label >Last Name</label>
-                        <input type="text" class="form-control" [(ngModel)]="itemC.lastName">
+                        <input type="text" class="form-control" [(ngModel)]="itemW.lastName">
                     </fieldset>
                 </div>
                 
@@ -297,18 +297,35 @@
                 <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                     <fieldset>
                         <label >Email</label>
-                        <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemC.email">
+                        <input type="email" class="form-control" readonly="readonly" [(ngModel)]="itemW.email">
                     </fieldset>
                 </div>
                 <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                     <fieldset>
-                        <label>Address</label>
-                        <input type="text" class="form-control" [(ngModel)]="itemC.address">
+                        <label>Status</label>
+                        <select class="form-control" id="userType" [(ngModel)]="itemW.status" >
+                            <option value="active" selected>Active</option>
+                            <option value="working">Working</option>
+                          </select>
                     </fieldset>
                 </div>
             </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Job Title</label>
+                    <input type="text" class="form-control" readonly="readonly" [(ngModel)]="itemW.jobTitle">
+                </fieldset>
+            </div>
+            <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+              <fieldset>
+                  <label >Category</label>
+                  <input type="text" class="form-control" readonly="readonly" [(ngModel)]="itemW.category">
+              </fieldset>
+          </div>
+            </div>
             <br>
-            <button class="btn btn-outline-danger btn-block" (click)="updateAdmin()">Save</button>
+            <button class="btn btn-outline-danger btn-block" (click)="updateWorker()">Save</button>
         </div>
     </div>
     <div class="modal-footer">

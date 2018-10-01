@@ -55,7 +55,7 @@ export class ApiService {
   }
 
   updateCustomer(id, data){
-
+    return this.afs.doc('customer/'+id).update(data);
   }
 
 
@@ -69,7 +69,23 @@ export class ApiService {
     return this.afs.doc('workers/'+id).delete();
   }
 
+  updateWorker(id,data){
+    return this.afs.doc('workers/'+id).update(data);
+  }
 
+// ::::::::::::::::::::::::::::::::::: Category CRUD :::::::::::::::::::::::::::::::::::::::::::::::
+
+  getCategory(){
+    return this.afs.collection('category').snapshotChanges();
+  }
+
+  deleteCategory(id){
+    return this.afs.doc('category/'+id).delete();
+  }
+
+  updateCategory(id,data){
+    return this.afs.doc('category/'+id).update(data);
+  }
 
 
 }

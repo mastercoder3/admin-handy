@@ -159,6 +159,44 @@ export class UserComponent implements OnInit {
       })
   }
 
+  editCustomer(content, item){
+    this.helper.openModelLg(content);
+    this.itemC = item;
+  }
+
+  updateCustomer(){
+    let id = this.itemC.did;
+    delete this.itemC['did'];
+
+    this.api.updateCustomer(id, this.itemC)
+    .then(res =>{
+      this.helper.closeModel();
+      this.toastr.success('User Update Successfully.','User Updated');
+    }, err =>{
+      this.toastr.error(err.message, 'Error!');
+    })
+  }
+
+  editWorker(content, item){
+    this.helper.openModelLg(content);
+    this.itemW = item;
+  }
+
+  updateWorker(){
+    let id = this.itemW.did;
+    delete this.itemW['did'];
+
+    this.api.updateWorker(id, this.itemW)
+    .then(res =>{
+      this.helper.closeModel();
+      this.toastr.success('User Update Successfully.','User Updated');
+    }, err =>{
+      this.toastr.error(err.message, 'Error!');
+    })
+  }
+
+
+
 
 
 }

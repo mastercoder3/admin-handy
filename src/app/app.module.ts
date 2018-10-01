@@ -25,6 +25,7 @@ import {AddUserComponent} from './dashboard/add-user/add-user.component';
 import { EditProfileComponent } from './dashboard/edit-profile/edit-profile.component';
 import { SpinnerComponent } from './ui/spinner/spinner.component';
 import { UserComponent } from './dashboard/user/user.component';
+import { CategoriesComponent } from './dashboard/categories/categories.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { UserComponent } from './dashboard/user/user.component';
     AddUserComponent,
     EditProfileComponent,
     SpinnerComponent,
-    UserComponent
+    UserComponent,
+    CategoriesComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +64,8 @@ import { UserComponent } from './dashboard/user/user.component';
         {path: 'home', component: HomeComponent},
         {path: 'edit-profile', component: EditProfileComponent},
         {path: 'add-user', component: AddUserComponent},
-        {path: 'users', component: UserComponent}
+        {path: 'users', component: UserComponent},
+        {path: 'categories', component: CategoriesComponent}
       ]}
     ])
 
