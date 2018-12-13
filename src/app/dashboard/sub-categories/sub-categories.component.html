@@ -1,13 +1,13 @@
 <div class="content-header row">
   <div class="content-header-left col-md-6 col-12 mb-1">
-      <h3 class="content-header-title">Categories</h3>
+      <h3 class="content-header-title">Sub Categories</h3>
   </div>
   <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-10">
       <div class="breadcrumb-wrapper col-12">
           <ol class="breadcrumb">
               <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a>
               </li>
-              <li class="breadcrumb-item"><a>Categories</a>
+              <li class="breadcrumb-item"><a>Sub Categories</a>
               </li>
           </ol>
       </div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-4 mb-1">
                                 <fieldset style="position: relative; float: right">
-                                    <button class="btn btn-primary btn-block" (click)="add(addCategory)" >Add Category</button>
+                                    <button class="btn btn-primary btn-block" (click)="add(addCategory)" >Add Sub-Category</button>
                                 </fieldset>
                             </div>
                           </div>
@@ -45,6 +45,7 @@
                                 <tr >
                                   <th>Name</th>
                                   <th>Long Name</th>
+                                  <th>Category</th>
                                   <th>Image</th>
                                   <th>Actions</th>
                                 </tr>
@@ -53,6 +54,7 @@
                                 <tr *ngFor="let item of category | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: p }">
                                   <th scope="row">{{item.name}}</th>
                                   <td class="small">{{item.lname}}</td>
+                                  <td class="small">{{item.categoryName}}</td>
                                   <td class="small"><img src="{{item.imageURL || image}}" alt="{{item.name}}" style="width: 50px; height: 50px;" ></td>
                                   <td >
                                       <span style="margin-left: 6px;"></span>
@@ -78,85 +80,48 @@
   </section>
 </div>
 
+
 <!-- Add a Category -->
 
   <!-- Modal for Edit Customer Purpose -->
   <ng-template #addCategory let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Add Category</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-          <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Add a Category</span></p>
-          <div class="card-body">
-              <div class="row">
-                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
-                  <fieldset>
-                      <label >Name</label>
-                      <input type="text" class="form-control"  [(ngModel)]="cat.name">
-                  </fieldset>
-              </div>
-              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
-                <fieldset>
-                    <label >Long Name</label>
-                    <input type="text" class="form-control"  [(ngModel)]="cat.lname">
-                </fieldset>
-            </div>
-              </div>
-              <div class="row">
-                  <div class="col-xl-4 col-lg-4 col-md-6 mb-1">
-                      <fieldset>
-                        <img src="{{cat.imageURL||catImage}}" alt="Categoy Image" >
-                      </fieldset>
-                      <fieldset id="browse">
-                        <label class="custom-file-label" for="upload">Choose an Image</label>
-                        <input type="file" class="custom-file-input" id="upload" (change)="upload($event)" accept=".png,.jpg">
-                      </fieldset>
-                  </div>
-              </div>
-              <br>
-              <button class="btn btn-outline-danger btn-block" (click)="createCat()">Add</button>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
-      </div>
-    </ng-template>
-
-
-    <!-- Edit Category -->
-
-    <!-- Modal for Edit Category Purpose -->
-  <ng-template #Edit let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Edit Category</h4>
+      <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
         <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Add a Category</span></p>
-        <div class="card-body" *ngIf="changeCat">
+        <div class="card-body">
+          <div class="row">
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                  <fieldset>
+                    <label for="">Select a Category</label>
+                      <select class="form-control"  [(ngModel)]="selected" (ngModelChange)="onChange($event)">
+                        <option *ngFor="let item of categories" [value]="item.name" >{{item.name}}</option>
+                      </select>
+                  </fieldset>
+              </div>
+          </div>
             <div class="row">
               <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
                 <fieldset>
                     <label >Name</label>
-                    <input type="text" class="form-control"  [(ngModel)]="changeCat.name">
+                    <input type="text" class="form-control"  [(ngModel)]="cat.name">
                 </fieldset>
             </div>
             <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
               <fieldset>
                   <label >Long Name</label>
-                  <input type="text" class="form-control"  [(ngModel)]="changeCat.lname">
+                  <input type="text" class="form-control"  [(ngModel)]="cat.lname">
               </fieldset>
           </div>
             </div>
             <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-6 mb-1">
                     <fieldset>
-                      <img src="{{changeCat.imageURL || catImage}}" alt="Categoy Image" style="width: 50px; height: 50px;">
+                      <img src="{{cat.imageURL||catImage}}" alt="Categoy Image" >
                     </fieldset>
                     <fieldset id="browse">
                       <label class="custom-file-label" for="upload">Choose an Image</label>
@@ -165,7 +130,63 @@
                 </div>
             </div>
             <br>
-            <button class="btn btn-outline-danger btn-block" (click)="updateCategory()">update</button>
+            <button class="btn btn-outline-danger btn-block" (click)="createCat()">Add</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+    </div>
+  </ng-template>
+  
+
+   <!-- Modal for Add Subcatefory Purpose -->
+   <ng-template #Edit let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Edit Category</span></p>
+        <div class="card-body" *ngIf="itemA">
+          <div class="row">
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                  <!-- <fieldset>
+                    <label for="">Select a Category</label>
+                      <select class="form-control"  [(ngModel)]="selected" (ngModelChange)="onChange($event)">
+                        <option *ngFor="let item of categories" [value]="item.name" >{{item.name}}</option>
+                      </select>
+                  </fieldset> -->
+              </div>
+          </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Name</label>
+                    <input type="text" class="form-control"  [(ngModel)]="itemA.name">
+                </fieldset>
+            </div>
+            <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+              <fieldset>
+                  <label >Long Name</label>
+                  <input type="text" class="form-control"  [(ngModel)]="itemA.lname">
+              </fieldset>
+          </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-6 mb-1">
+                    <fieldset>
+                      <img src="{{itemA.imageURL||ItemAImage}}" alt="Categoy Image" style="width: 50px; height: 50px;">
+                    </fieldset>
+                    <fieldset id="browse">
+                      <label class="custom-file-label" for="upload">Choose an Image</label>
+                      <input type="file" class="custom-file-input" id="upload" (change)="upload($event)" accept=".png,.jpg">
+                    </fieldset>
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-outline-danger btn-block" (click)="updateSubCategory()">Add</button>
         </div>
     </div>
     <div class="modal-footer">

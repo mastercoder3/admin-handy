@@ -6,7 +6,7 @@
           <li class="nav-item"><a routerLink="/dashboard/home"><i class="ft-home"></i><span class="menu-title" >Dashboard</span>
           </a>
           </li>
-          <li class="nav-item" *ngIf="privilege" ><a><i class="ft-user"></i><span class="menu-title">Users</span></a>
+          <!-- <li class="nav-item" *ngIf="privilege" ><a><i class="ft-user"></i><span class="menu-title">Users</span></a>
               <ul class="menu-content">
                   <li><a class="menu-item" ></a>
                       <ul class="menu-content">
@@ -17,17 +17,21 @@
                       </ul>
                   </li>
               </ul>
+          </li> -->
+          <li class="nav-item"><a  routerLink="/dashboard/add-user"><i class="ft-file-text"></i><span class="menu-title">Add User</span></a>
+          </li>
+          <li class="nav-item"><a  routerLink="/dashboard/users"><i class="ft-file-text"></i><span class="menu-title">User Details</span></a>
           </li>
           <li class="nav-item"><a  routerLink="/dashboard/categories"><i class="ft-file-text"></i><span class="menu-title">Categories</span></a>
           </li>
-          <li class="nav-item"><a  (click)="invoice()"><i class="ft-file-text"></i><span class="menu-title">Invoice</span></a>
+          <li class="nav-item"><a  routerLink="/dashboard/sub-categories"><i class="ft-file-text"></i><span class="menu-title">Sub Categories</span></a>
           </li>
-          <li class="nav-item"><a  (click)="income()"><i class="fa fa-money"></i><span class="menu-title">Income</span></a>
+          <!-- <li class="nav-item"><a  routerLink="/dashboard/offers"><i class="fa fa-money"></i><span class="menu-title">Offers</span></a>
+          </li> -->
+          <li class="nav-item"><a  routerLink="/dashboard/posts"><i class="ft-settings"></i><span class="menu-title">Posts</span></a>
           </li>
-          <li class="nav-item"><a  (click)="manageOrders()"><i class="ft-settings"></i><span class="menu-title">Manage Orders</span></a>
-          </li>
-          <li class="nav-item"><a  (click)="tracking()"><i class="ft-settings"></i><span class="menu-title">Tracking</span></a>
-          </li>
+          <li class="nav-item"><a routerLink="/dashboard/settings"  ><i class="ft-settings"></i><span class="menu-title">Settings</span></a>
+           </li>
           <li class="nav-item"><a  (click)="logout()"><i class="ft-log-out"></i><span class="menu-title">Log out</span></a>
           </li>
       </ul>

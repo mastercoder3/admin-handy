@@ -87,5 +87,91 @@ export class ApiService {
     return this.afs.doc('category/'+id).update(data);
   }
 
+  checkIfCategoryExists(name){
+    return this.afs.collection('category', ref => ref.where('name','==',name)).valueChanges();
+  }
+
+  createCategory(data){
+    return this.afs.collection('category').add(data);
+  }
+
+  //:::::::::::::::::::::::::::::::: Sub-Category CRUD :::::::::::::::::::::::::::::::::::::::::::
+
+  getSubCategory(){
+    return this.afs.collection('subCategory').snapshotChanges();
+  }
+
+  checkIfSubCategoryExists(name){
+    return this.afs.collection('subCategory', ref => ref.where('name','==',name)).valueChanges();
+  }
+
+  createSubCategory(data){
+    return this.afs.collection('subCategory').add(data);
+  }
+
+  // :::::::::::::::::::::::::::::::::::: OFFERS ::::::::::::::::::::::::::::::::::::::::::::::::
+
+  getOffers(){
+    return this.afs.collection('offers').snapshotChanges();
+  }
+
+  createOffer(data){
+    return this.afs.collection('offers').add(data);
+  }
+
+  deleteOffer(id){
+    return this.afs.doc('offers/'+id).delete();
+  }
+
+  // :::::::::::::::::::::::::::::::::::: POSTS ::::::::::::::::::::::::::::::::::::::::::::::::
+
+  getPosts(){
+    return this.afs.collection('newposts').snapshotChanges();
+  }
+
+  updatePost(id, data){
+    return this.afs.doc('newposts/'+id).set(data);
+  }
+
+  deletePost(id){
+    return this.afs.doc('newposts/'+id).delete();
+  }
+
+  updateSubCategory(id,data){
+    return this.afs.doc('subCategory/'+id).update(data);
+  }
+
+  deleteSubCategory(id){
+    return this.afs.doc('subCategory/'+id).delete();
+  }
+
+  getSettings(id){
+    return this.afs.doc('settings/'+id).valueChanges();
+  }
+
+  updateSettings(id,data){
+    return this.afs.doc('settings/'+id).update(data);
+  }
+
+  getFaqs(){
+    return this.afs.collection('faqs').snapshotChanges();
+  }
+
+  deleteFaq(id){
+    return this.afs.doc('faqs/'+id).delete();
+  }
+
+  addFaq(data){
+    return this.afs.collection('faqs').add(data);
+  }
+
+  createNotification(data){
+    return this.afs.collection('notifications').add(data);
+  }
+
+  deleteUser(id){
+    return this.afs.doc('users/'+id).delete();
+  }
+
 
 }

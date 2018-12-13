@@ -3,6 +3,7 @@ import { ApiService } from '../../services/api.service';
 import {map} from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { HelperService } from '../../services/helper.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -28,11 +29,13 @@ export class UserComponent implements OnInit {
   itemA;
   itemC;
   itemW;
+  selectedStatus;
 
   constructor(
     private api: ApiService,
     private toastr: ToastrService,
-    private helper: HelperService
+    private helper: HelperService,
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -56,13 +59,24 @@ export class UserComponent implements OnInit {
         })
   }
 
+  res
+
   delete(item){
     if(confirm(`Do you want to delete: ${item.email}`))
     {
       let id = item.did;
       this.api.deleteAdminData(id)
         .then( res=>{
-          this.toastr.success('Data Deleted Successfully.','Deletion!');
+          this.helper.deleteUser(id)
+            .subscribe(res =>{
+              this.res = res;
+              if(this.res._body === 'ok' || this.res.status === 200){
+                  this.toastr.success('Data Deleted Successfully.','Deletion!');
+              }
+              else{
+                this.toastr.error('User Not deleted.', 'Error!');
+              }
+            });
         }, err=>{
           this.toastr.error(err.message, 'Error!');
         })
@@ -72,20 +86,66 @@ export class UserComponent implements OnInit {
   deleteCustomer(item){
     if(confirm(`Do you want to delete: ${item.email}`)){
       let id = item.did;
+      let pid = item.phoneId;
       this.api.deleteCustomer(id)
         .then(res => {
-          this.toastr.success('User Data Deleted Successfully.','Deletion!')
+          this.removeWorker(id);
+          this.helper.deleteUser(id)
+            .subscribe(res =>{
+              this.res = res;
+              if(this.res._body === 'ok' || this.res.status === 200){
+                  this.toastr.success('Data Deleted Successfully.','Deletion!');
+                  if(pid){
+                    this.removePhoneId(pid);
+                  }
+              }
+              else{
+                this.toastr.error('User Not deleted.', 'Error!');
+              }
+            });
         }, err =>{
           this.toastr.error(err.message, 'Error');
         })
     }
   }
 
+  removePhoneId(id){
+    this.helper.deleteUser(id)
+      .subscribe(res =>{
+        if(res.status !== 200)
+        this.toastr.error('Something Went Wrong.', 'Error');
+    });
+  }
+
+  removeCustomer(id){
+    this.api.deleteCustomer(id);
+    this.api.deleteUser(id);
+  }
+  removeWorker(id){
+    this.api.deleteWorker(id);
+    this.api.deleteUser(id);
+  }
+
   deleteWorker(item){
     if(confirm(`Do you want to delete: ${item.email}`)){
+      let id = item.did;
+      let pid = item.phoneId;
       this.api.deleteWorker(item.did)
         .then(res => {
-          this.toastr.success('User Data deleted Successfully.','Deletion');
+          this.removeCustomer(id);
+          this.helper.deleteUser(id)
+            .subscribe(res =>{
+              this.res = res;
+              if(this.res._body === 'ok' || this.res.status === 200){
+                  this.toastr.success('Data Deleted Successfully.','Deletion!');
+                  if(pid){
+                    this.removePhoneId(pid);
+                  }
+              }
+              else{
+                this.toastr.error('User Not deleted.', 'Error!');
+              }
+            });
         }, err =>{
           this.toastr.error(err.message, 'Error');
         });
@@ -180,6 +240,10 @@ export class UserComponent implements OnInit {
   editWorker(content, item){
     this.helper.openModelLg(content);
     this.itemW = item;
+    if(this.itemW.status === true)
+      this.selectedStatus = 'active'
+    else if(this.itemW.status === false)
+      this.selectedStatus = 'offline'
   }
 
   updateWorker(){
@@ -193,6 +257,15 @@ export class UserComponent implements OnInit {
     }, err =>{
       this.toastr.error(err.message, 'Error!');
     })
+  }
+
+  statusChanged(event){
+    if(event === 'offline'){
+      this.itemW.status = false;
+    }
+    else if(event === 'active'){
+      this.itemW.status = true;
+    }
   }
 
 

@@ -1,0 +1,149 @@
+<div class="content-header row">
+    <div class="content-header-left col-md-6 col-12 mb-1">
+        <h3 class="content-header-title">Posts</h3>
+    </div>
+    <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-10">
+        <div class="breadcrumb-wrapper col-12">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item"><a>Posts</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+  </div>
+
+  <div class="content-body">
+      <section class="basic-elements">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Posts</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <app-spinner *ngIf="showSpinner"></app-spinner>
+                            <div class="row" *ngIf="!showSpinner">
+                                <div class="col-xl-10 col-lg-10 col-md-8 mb-1">
+                                    <fieldset>
+                                        <input type="text"
+                                        class="form-control" [(ngModel)]="userFilter.status" placeholder="Search by Status"  *ngIf="!showSpinner" style="max-width: 300px">
+                                    </fieldset>
+                                </div>
+                                </div>
+
+                                <br>
+
+                                <div class="table-responsive">
+                                    <table class="table" *ngIf="!showSpinner">
+                                      <thead>
+                                        <tr >
+                                          <th>Post Description</th>
+                                          <th>Category</th>
+                                          <th>Customer Name</th>
+                                          <th>Service Type</th>
+                                          <th>Status</th>
+                                          <th>Actions</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let item of posts | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: p }">
+                                          <td class="small"><p>{{item.desc}}</p></td>
+                                          <th scope="row">{{item.category}}</th>
+                                          <td class="small">{{item.customerName}}</td>
+                                          <td class="small">{{item.serviceType}}</td>
+                                          <td class="small">{{item.status}}</td>
+                                          <td >
+                                              <span style="margin-left: 6px;"></span>
+                                            <a style="color: green;" (click)="accept(item)" *ngIf="item.status=='inactive' "><i class="ft-check"> Accept</i></a>
+                                            <span style="margin-left: 6px;"></span>
+                                            <a style="color: red" (click)="delete(item)"><i class="ft-trash-2"> Delete</i></a>
+                                            <span style="margin-left: 6px;"></span>
+                                            <a style="color: green;" (click)="edit(postInfo, item)"><i class="ft-edit">View Post</i></a>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <pagination-controls (pageChange)="p = $event" previousLabel="Previous"
+                                    nextLabel="Next"
+                                    responsive="true"
+                                    autoHide="true"
+                                    directionLinks="false"
+                                    ></pagination-controls>
+                                  </div>
+
+                          </div>
+                    </div>
+                </div>
+              </div>
+        </div>
+      </section>
+  </div>
+
+  <ng-template #postInfo let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Post Details</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>{{viewItem?.category}}</span></p>
+        <div class="card-body">
+            <div class="row">
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Description</label>
+                    <textarea type="text" class="form-control" row="4" col="10"  [(ngModel)]="viewItem.desc" readonly></textarea>
+                </fieldset>
+            </div>
+            <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+              <fieldset>
+                  <label >Service Type</label>
+                  <input type="text" class="form-control"  [(ngModel)]="viewItem.serviceType" readonly>
+              </fieldset>
+          </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                  <fieldset>
+                      <label >Service Seeker Name</label>
+                      <input type="text" class="form-control"  [(ngModel)]="viewItem.customerName" readonly>
+                  </fieldset>
+              </div>
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Date</label>
+                    <input type="text" class="form-control" [(ngModel)]="viewItem.waqt" readonly>
+                </fieldset>
+            </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                  <fieldset>
+                      <label >City</label>
+                      <input type="text" class="form-control"  [(ngModel)]="viewItem.city" readonly>
+                  </fieldset>
+              </div>
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Who can apply?</label>
+                    <input type="text" class="form-control"  [(ngModel)]="viewItem.whocanapply" readonly>
+                </fieldset>
+            </div>
+              </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-6 mb-1">
+                    <fieldset>
+                      <img src="{{viewItem.postImage || image}}" alt="Categoy Image" style="width: 200px; height: 200px;">
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+    </div>
+  </ng-template>

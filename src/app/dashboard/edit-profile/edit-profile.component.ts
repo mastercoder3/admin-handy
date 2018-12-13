@@ -35,7 +35,7 @@ export class EditProfileComponent implements OnInit {
   
   upload(event){
     const id =  localStorage.getItem('aid');
-    this.ref = this.fireStorage.ref(id);
+    this.ref = this.fireStorage.ref(`users ${id}`);
     this.task = this.ref.put(event.target.files[0]);
     this.uploadProgress = this.task.percentageChanges();
     this.task.snapshotChanges().pipe(

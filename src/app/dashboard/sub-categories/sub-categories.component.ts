@@ -7,11 +7,11 @@ import {map, finalize} from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.css']
+  selector: 'app-sub-categories',
+  templateUrl: './sub-categories.component.html',
+  styleUrls: ['./sub-categories.component.css']
 })
-export class CategoriesComponent implements OnInit {
+export class SubCategoriesComponent implements OnInit {
 
   showSpinner: boolean = true;
   userFilter={
@@ -20,6 +20,8 @@ export class CategoriesComponent implements OnInit {
   image: string = './../../assets/app-assets/images/section.png';
   category;
   cat={
+    categoryId: '',
+    categoryName: '',
     name: '',
     lname: '',
     imageURL: ''
@@ -30,9 +32,10 @@ export class CategoriesComponent implements OnInit {
   downloadURL: Observable<any>;
   ref: AngularFireStorageReference;
   task: AngularFireUploadTask;
-  createC: boolean = false;
+  selected;
+  categories;
+  itemA;
   click: boolean = false;
-  changeCat;
 
   constructor(
     private api: ApiService,
@@ -46,7 +49,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   getData(){
-    this.api.getCategory()
+    this.api.getSubCategory()
       .pipe(map(actions => actions.map(a=>{
         const data = a.payload.doc.data();
         const did = a.payload.doc.id;
@@ -59,20 +62,44 @@ export class CategoriesComponent implements OnInit {
   }
 
   add(content){
-    this.changeCat = true;
     this.helper.openModelLg(content);
+    this.getCat();
+  }
+
+  getCat(){
+    this.api.getCategory()
+    .pipe(map(actions => actions.map(a=>{
+      const data = a.payload.doc.data();
+      const did = a.payload.doc.id;
+      return {did, ...data};
+    })))
+    .subscribe(res =>{
+      this.categories = res;
+      this.selected = this.categories[0].name;
+      this.cat.categoryId = this.categories[0].did;
+      this.cat.categoryName = this.categories[0].name;
+    })
+  }
+
+  onChange(event){
+    
+    this.categories.forEach(a =>{
+      if(a.name === event){
+        this.cat.categoryId = a.did;
+        this.cat.categoryName = a.name;
+      }
+    })
   }
 
   createCat(){
     if(this.cat.name != '' && this.cat.lname != '' && this.cat.imageURL != ''){
-      this.api.checkIfCategoryExists(this.cat.name)
+      this.api.checkIfSubCategoryExists(this.cat.name)
         .subscribe(res =>{
           if(res.length  === 0){
-            this.api.createCategory(this.cat)
+            this.api.createSubCategory(this.cat)
               .then(res => {
-                this.createC = false;
                 this.helper.closeModel();
-                this.toastr.success('Category added successfullt!', 'Creating Category');
+                this.toastr.success('Category added successfully!', 'Creating Category');
                 this.cat.name = '';
                 this.cat.lname = '';
                 this.cat.imageURL = '';
@@ -93,8 +120,8 @@ export class CategoriesComponent implements OnInit {
   upload(event){
     this.click = true;
     let id = Math.floor(Date.now() / 1000);
-    this.ref = this.fireStorage.ref(`categories/${id}`);
-    if((this.cat.name != '' || this.changeCat.name !== '') && (this.cat.lname != '' || this.changeCat.lname !== '')){  
+    this.ref = this.fireStorage.ref(`sub_categories/${id}`);
+    if( (this.cat.name != '' || this.itemA.name !== '') && (this.cat.lname != '' || this.itemA.lname !== '')){  
       this.task = this.ref.put(event.target.files[0]);
       this.uploadProgress = this.task.percentageChanges();
       this.task.snapshotChanges().pipe(
@@ -102,10 +129,9 @@ export class CategoriesComponent implements OnInit {
           this.ref.getDownloadURL().subscribe(url => {
             this.image = url;
             this.cat.imageURL = url;
-            this.changeCat.imageURL = url;
             this.click = false;
-            //if(this.createC === true)
-              //this.createCat();
+            this.itemA.imageURL = url;
+           // this.createCat();
           });
         })
       ).subscribe();
@@ -115,43 +141,42 @@ export class CategoriesComponent implements OnInit {
 
   }
 
+  
   edit(content, item){
     this.helper.openModelLg(content);
-    this.changeCat = item;
-    this.createC=false;
+    this.itemA = item;
   }
 
-  delete(item){
-    if(confirm(`Are you sure you want to delete ${item.name}`)){
-      this.api.deleteCategory(item.did)
-        .then(res => {
-          this.toastr.success('Data Delted Successfully.','Record Deletion');
-        }, err => {
-          this.toastr.error(err.message, 'Error!');
-        })
-    }
-  }
-
-  updateCategory(){
-    if(this.click === true)
-    {
-      this.toastr.warning('Image Uploading.');
+  updateSubCategory(){
+    if(this.click === true){
+      this.toastr.warning('Image Uploading');
     }
     else{
-        let id = this.changeCat.did;
-    delete this.changeCat['did'];
-    let url = this.changeCat.imageURL;
-    this.changeCat.imageURL = (this.cat.imageURL !== '') ? this.cat.imageURL : url;
-    this.api.updateCategory(id, this.changeCat)
+      let id = this.itemA.did;
+    delete this.itemA['did'];
+    let image =  this.itemA.imageURL;
+    this.api.updateSubCategory(id, this.itemA)
     .then(res =>{
       this.helper.closeModel();
       this.toastr.success('Category Update Successfully.','User Updated');
-      this.changeCat = {};
+      this.itemA = {};
     }, err =>{
       this.toastr.error(err.message, 'Error!');
     })
     }
-  
+    
+  }
+
+  delete(item){
+    if(confirm(`Are you sure you want to delete ${item.name}`)){
+      this.api.deleteSubCategory(item.did)
+        .then(res => {
+          this.toastr.success('Data Delted Successfully.','Record Deletion');
+          
+        }, err => {
+          this.toastr.error(err.message, 'Error!');
+        })
+    }
   }
 
   

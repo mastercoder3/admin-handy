@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +11,7 @@ export class SidebarComponent implements OnInit {
   type: string = "Menu";
   privilege: boolean = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
     if(localStorage.getItem('privilegeType') === 'MASTER')
@@ -22,7 +23,12 @@ export class SidebarComponent implements OnInit {
       this.type ="Admin";
       this.privilege = false;
     }
-    console.log(localStorage.getItem('privilegeType'))
+  }
+
+  logout(){
+    localStorage.removeItem('aid');
+    localStorage.removeItem('privilegeType');
+    this.router.navigate(['/login']);
   }
 
 }

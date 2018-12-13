@@ -1,0 +1,126 @@
+<div class="content-header row">
+  <div class="content-header-left col-md-6 col-12 mb-1">
+      <h3 class="content-header-title">Offers</h3>
+  </div>
+  <div class="content-header-right breadcrumbs-right breadcrumbs-top col-md-6 col-10">
+      <div class="breadcrumb-wrapper col-12">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a routerLink="/dashboard/home">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item"><a>Offers</a>
+              </li>
+          </ol>
+      </div>
+  </div>
+</div>
+
+<div class="content-body">
+  <section class="basic-elements">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Banners</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <app-spinner *ngIf="showSpinner"></app-spinner>
+                        <div class="row" *ngIf="!showSpinner">
+                            <div class="col-xl-10 col-lg-10 col-md-8 mb-1">
+                                <fieldset>
+                                    <input type="text"
+                                    class="form-control" [(ngModel)]="userFilter.name" placeholder="Search by Category Name"  *ngIf="!showSpinner" style="max-width: 300px">
+                                </fieldset>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-4 mb-1">
+                                <fieldset style="position: relative; float: right">
+                                    <button class="btn btn-primary btn-block" (click)="add(addOffer)" >Add New Offer</button>
+                                </fieldset>
+                            </div>
+                          </div>
+                            <br>
+
+                            <div class="table-responsive">
+                                <table class="table" *ngIf="!showSpinner">
+                                  <thead>
+                                    <tr >
+                                      <th>Offer Name</th>
+                                      <th>Offer Text</th>
+                                      <th>Image</th>
+                                      <th>Actions</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let item of offers | filterBy:userFilter | paginate: { itemsPerPage: 10, currentPage: pAdmin }">
+                                      <th scope="row">{{item.name}}</th>
+                                      <td class="small">{{item.text}}</td>
+                                      <td class="small"><img src="{{item.imageURL || image}}" alt="{{item.name}}" style="width: 50px; height: 50px;" ></td>
+                                      <td >
+                                          <span style="margin-left: 6px;"></span>
+                                        <a style="color: green;" (click)="edit(Edit, item)"><i class="ft-edit"></i></a>
+                                        <span style="margin-left: 6px;"></span>
+                                        <a style="color: red" (click)="delete(item)"><i class="ft-trash-2"></i></a>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <pagination-controls (pageChange)="pAdmin = $event" previousLabel="Previous"
+                                nextLabel="Next"
+                                responsive="true"
+                                autoHide="true"
+                                directionLinks="false"
+                                ></pagination-controls>
+                              </div>
+                      </div>
+                </div>
+            </div>
+      </div>
+  </div>
+  </section>
+</div>
+
+
+  <!-- Modal for Edit Customer Purpose -->
+  <ng-template #addOffer let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">New Offer</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>Add an Offer</span></p>
+          <div class="card-body">
+              <div class="row">
+                <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                  <fieldset>
+                      <label >Name</label>
+                      <input type="text" class="form-control"  [(ngModel)]="newOffer.name">
+                  </fieldset>
+              </div>
+              <div class="col-xl-6 col-lg-4 col-md-12 mb-1">
+                <fieldset>
+                    <label >Text</label>
+                    <input type="text" class="form-control"  [(ngModel)]="newOffer.text">
+                </fieldset>
+            </div>
+              </div>
+              <div class="row">
+                  <div class="col-xl-4 col-lg-4 col-md-6 mb-1">
+                      <fieldset>
+                        <img src="{{newOffer.imageURL||image}}" alt="Categoy Image" style="max-width: 250px; max-height: 250px;">
+                      </fieldset>
+                      <fieldset id="browse">
+                        <label class="custom-file-label" for="upload">Choose an Image</label>
+                        <input type="file" class="custom-file-input" id="upload" (change)="upload($event)" accept=".png,.jpg">
+                      </fieldset>
+                  </div>
+              </div>
+              <br>
+              <button class="btn btn-outline-danger btn-block" (click)="createOffer()">Add</button>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">close</button>
+      </div>
+    </ng-template>

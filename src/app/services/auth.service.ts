@@ -7,7 +7,7 @@ import * as firebase from 'firebase';
 })
 export class AuthService {
 
-  constructor(private auth: AngularFireAuth) { }
+  constructor(private auth: AngularFireAuth) {}
 
   login(email, password){
     return  this.auth.auth.signInWithEmailAndPassword(email,password);
@@ -34,4 +34,5 @@ export class AuthService {
     user.updatePassword(password);
     return user;
   }
+
 }

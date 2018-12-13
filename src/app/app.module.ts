@@ -7,6 +7,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import { ToastrModule } from 'ngx-toastr';
 import {NgbPaginationModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {HttpModule} from '@angular/http';
 
 //Firebase
 import { AngularFireModule } from '@angular/fire';
@@ -26,6 +27,12 @@ import { EditProfileComponent } from './dashboard/edit-profile/edit-profile.comp
 import { SpinnerComponent } from './ui/spinner/spinner.component';
 import { UserComponent } from './dashboard/user/user.component';
 import { CategoriesComponent } from './dashboard/categories/categories.component';
+import { SubCategoriesComponent } from './dashboard/sub-categories/sub-categories.component';
+import { BannersComponent } from './dashboard/banners/banners.component';
+import { PostsComponent } from './dashboard/posts/posts.component';
+import { SettingsComponent } from './dashboard/settings/settings.component';
+import { FaqsComponent } from './dashboard/faqs/faqs.component';
+import { AuthGaurdService } from './services/auth-gaurd.service';
 
 
 @NgModule({
@@ -40,7 +47,12 @@ import { CategoriesComponent } from './dashboard/categories/categories.component
     EditProfileComponent,
     SpinnerComponent,
     UserComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    SubCategoriesComponent,
+    BannersComponent,
+    PostsComponent,
+    SettingsComponent,
+    FaqsComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +64,7 @@ import { CategoriesComponent } from './dashboard/categories/categories.component
     NgbPaginationModule,
     NgbModule,
     NgxPaginationModule,
+    HttpModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireStorageModule,
@@ -65,8 +78,13 @@ import { CategoriesComponent } from './dashboard/categories/categories.component
         {path: 'edit-profile', component: EditProfileComponent},
         {path: 'add-user', component: AddUserComponent},
         {path: 'users', component: UserComponent},
-        {path: 'categories', component: CategoriesComponent}
-      ]}
+        {path: 'categories', component: CategoriesComponent},
+        {path: 'sub-categories', component: SubCategoriesComponent},
+        {path: 'offers', component: BannersComponent},
+        {path: 'posts', component: PostsComponent},
+        {path: 'settings', component: SettingsComponent},
+        {path:'faqs', component: FaqsComponent}
+      ], canActivate: [AuthGaurdService]}
     ])
 
   ],
